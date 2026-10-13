@@ -1,0 +1,96 @@
+
+/* Universal styles */
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "DM Sans", sans-serif;
+    background: #fff;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Header */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Navbar */
+
+nav{
+    border-bottom:0.01em  solid gray;
+}
+
+.navbar {
+    min-height: 80px;
+    padding: 0 5% ;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    color: gray;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    height: 60px;
+}
+
+/* Logo */
+
+.logo {
+    width: 120px;
+    height: 95px;
+    object-fit: contain;
+}
+
+/* Navigation links */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    padding-left: 450px;
+    gap: 28px;
+    list-style: none;
+    font-size: 0.2em;
+}
+
+.nav-links a {
+    display: block;
+    padding: 10px 0;
+    transition: color 0.3s ease;
+    font-size: 13px;
+}
+
+.nav-links a:hover {
+    color: #3b82f6;
+}
+
+/* Login button */
+
+.login {
+    padding: 10px 22px;
+    background-color: #0047b9;
+    color: white;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.login:hover {
+    background-color: #2563eb;
+}
+
+.hero-container{
+    height: 680px;
+    width: 100%;
+    background-color: #ffffff;
+}
