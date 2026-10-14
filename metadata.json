@@ -1,0 +1,6 @@
+{
+  "name": "CampusCred",
+  "description": "Digitize and manage co-curricular club activities, memberships, events, real-time chat, verified attendance, and transcripts across MSOT campuses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

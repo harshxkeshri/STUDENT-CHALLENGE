@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer shield / crest outline in gold & cyan accent -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M54,26 C64,26 73,30 76,34 C76,52 66,69 54,76 C42,69 32,52 32,34 C35,30 44,26 54,26 Z" />
+    <path
+        android:fillColor="#1E1B4B"
+        android:pathData="M54,30 C62,30 70,33 72,36 C72,50 64,65 54,71 C44,65 36,50 36,36 C38,33 46,30 54,30 Z" />
+    <!-- 4 quadrant symbols representing the 4 clubs:
+         Kaizen Tech (Code/Tech), Malhar (Star/Creative), Khel Society (Trophy/Sports), Nexcell (Rocket/Enterprise) -->
+    <!-- Top-Left: Code tag / Tech (Kaizen Tech) -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M47,38 L42,42 L47,46 L45.5,47.5 L39,42 L45.5,36.5 Z" />
+    <!-- Top-Right: Sparkle / Star (Malhar Creative) -->
+    <path
+        android:fillColor="#F472B6"
+        android:pathData="M61,37 L62.5,41 L66.5,42.5 L62.5,44 L61,48 L59.5,44 L55.5,42.5 L59.5,41 Z" />
+    <!-- Bottom-Left: Trophy / Sports ball (Khel Society) -->
+    <path
+        android:fillColor="#34D399"
+        android:pathData="M42,52 L48,52 L46.5,57 L47.5,59 L42.5,59 L43.5,57 Z M41,53 L39,53 L39,55 L41,55 Z M49,53 L51,53 L51,55 L49,55 Z" />
+    <!-- Bottom-Right: Rocket / Growth (Nexcell Enterprise) -->
+    <path
+        android:fillColor="#FB923C"
+        android:pathData="M61,51 C63,51 65,53 65,56 L63,60 L60,57 C60,54 60,52 61,51 Z M58,58 L60,60 L57,61 Z" />
+    <!-- Center connecting sphere node -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,47 A4,4 0 1,0 54,55 A4,4 0 1,0 54,47 Z" />
+</vector>
