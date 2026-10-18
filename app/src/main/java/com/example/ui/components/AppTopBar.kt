@@ -29,12 +29,26 @@ fun AppTopBar(
     onSelectCampus: (Campus) -> Unit,
     currentRole: UserRole,
     currentUser: com.example.model.UserProfile,
+<<<<<<< HEAD
     onOpenRoleSwitcher: () -> Unit,
+=======
+<<<<<<< HEAD
+    onOpenRoleSwitcher: () -> Unit,
+=======
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     notifications: List<AppNotification>,
     onMarkNotificationsRead: () -> Unit,
     isDarkMode: Boolean,
     onToggleDarkMode: () -> Unit,
     onSignOut: () -> Unit,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    onOpenAiCopilot: () -> Unit = {},
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     modifier: Modifier = Modifier
 ) {
     var campusMenuExpanded by remember { mutableStateOf(false) }
@@ -45,6 +59,10 @@ fun AppTopBar(
 
     TopAppBar(
         modifier = modifier.testTag("app_top_bar"),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c0aa687 (final project)
         title = {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -100,6 +118,50 @@ fun AppTopBar(
                     }
 
                     DropdownMenu(
+<<<<<<< HEAD
+=======
+=======
+        navigationIcon = {
+            Box(modifier = Modifier.padding(start = 12.dp, end = 6.dp)) {
+                MiraiLogoBadge(sizeDp = 38.dp)
+            }
+        },
+        title = {
+            // Campus selector dropdown chip without Mirai Clubs text heading
+            Box {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable { campusMenuExpanded = true }
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .testTag("campus_selector_dropdown"),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Place,
+                        contentDescription = "Campus",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = selectedCampus.displayName,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(14.dp)
+                    )
+                }
+
+                DropdownMenu(
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
                         expanded = campusMenuExpanded,
                         onDismissRequest = { campusMenuExpanded = false }
                     ) {
@@ -126,6 +188,10 @@ fun AppTopBar(
                         }
                     }
                 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c0aa687 (final project)
             }
         },
         actions = {
@@ -134,6 +200,30 @@ fun AppTopBar(
                 onClick = onOpenRoleSwitcher,
                 label = { Text(currentRole.label.split(" ").first(), fontSize = 11.sp) },
                 leadingIcon = {
+<<<<<<< HEAD
+=======
+=======
+        },
+        actions = {
+            // Immutable Verified Role Badge (No switching allowed)
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = when (currentRole) {
+                    UserRole.STUDENT -> MaterialTheme.colorScheme.primaryContainer
+                    UserRole.COORDINATOR -> Color(0xFFE0F2FE)
+                    UserRole.ADVISOR -> Color(0xFFF3E8FF)
+                    UserRole.CAMPUS_MANAGER -> Color(0xFFD1FAE5)
+                },
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .testTag("verified_role_badge")
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
                     Icon(
                         imageVector = when (currentRole) {
                             UserRole.STUDENT -> Icons.Filled.School
@@ -142,11 +232,71 @@ fun AppTopBar(
                             UserRole.CAMPUS_MANAGER -> Icons.Filled.AdminPanelSettings
                         },
                         contentDescription = "Role",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c0aa687 (final project)
                         modifier = Modifier.size(14.dp)
                     )
                 },
                 modifier = Modifier.padding(end = 4.dp).testTag("role_badge_chip")
             )
+<<<<<<< HEAD
+=======
+=======
+                        tint = when (currentRole) {
+                            UserRole.STUDENT -> MaterialTheme.colorScheme.onPrimaryContainer
+                            UserRole.COORDINATOR -> Color(0xFF0369A1)
+                            UserRole.ADVISOR -> Color(0xFF7E22CE)
+                            UserRole.CAMPUS_MANAGER -> Color(0xFF047857)
+                        },
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = when (currentRole) {
+                            UserRole.STUDENT -> "Student"
+                            UserRole.COORDINATOR -> "Coordinator"
+                            UserRole.ADVISOR -> "Advisor"
+                            UserRole.CAMPUS_MANAGER -> "Dean / Manager"
+                        },
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = when (currentRole) {
+                            UserRole.STUDENT -> MaterialTheme.colorScheme.onPrimaryContainer
+                            UserRole.COORDINATOR -> Color(0xFF0369A1)
+                            UserRole.ADVISOR -> Color(0xFF7E22CE)
+                            UserRole.CAMPUS_MANAGER -> Color(0xFF047857)
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(3.dp))
+                    Icon(
+                        imageVector = Icons.Filled.Lock,
+                        contentDescription = "Role Locked",
+                        tint = when (currentRole) {
+                            UserRole.STUDENT -> MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+                            UserRole.COORDINATOR -> Color(0xFF0369A1).copy(alpha = 0.6f)
+                            UserRole.ADVISOR -> Color(0xFF7E22CE).copy(alpha = 0.6f)
+                            UserRole.CAMPUS_MANAGER -> Color(0xFF047857).copy(alpha = 0.6f)
+                        },
+                        modifier = Modifier.size(10.dp)
+                    )
+                }
+            }
+
+            // Mirai AI Copilot Action Button
+            IconButton(
+                onClick = onOpenAiCopilot,
+                modifier = Modifier.testTag("open_ai_copilot_button")
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.AutoAwesome,
+                    contentDescription = "Mirai AI Copilot",
+                    tint = Color(0xFF38BDF8)
+                )
+            }
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 
             // Dark Mode Toggle
             IconButton(
@@ -268,6 +418,10 @@ fun AppTopBar(
                     )
                     Divider()
                     DropdownMenuItem(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c0aa687 (final project)
                         text = { Text("Switch Role") },
                         onClick = {
                             userMenuExpanded = false
@@ -279,6 +433,12 @@ fun AppTopBar(
                     )
                     DropdownMenuItem(
                         text = { Text("Sign Out / Switch", color = MaterialTheme.colorScheme.error) },
+<<<<<<< HEAD
+=======
+=======
+                        text = { Text("Sign Out", color = MaterialTheme.colorScheme.error) },
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
                         onClick = {
                             userMenuExpanded = false
                             onSignOut()

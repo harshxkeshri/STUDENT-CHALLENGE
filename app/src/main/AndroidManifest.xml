@@ -26,6 +26,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+        <receiver
+            android:name=".util.EventReminderReceiver"
+            android:exported="false" />
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     </application>
 
 </manifest>

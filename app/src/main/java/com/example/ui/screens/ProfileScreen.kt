@@ -40,9 +40,22 @@ fun ProfileScreen(
     onOpenTranscript: () -> Unit,
     onOpenCertificate: (Certificate) -> Unit,
     onVerifyCertNumber: (String) -> Certificate?,
+<<<<<<< HEAD
     onOpenRoleSwitcher: () -> Unit,
     onShareProfile: () -> Unit,
     onSignOut: () -> Unit,
+=======
+<<<<<<< HEAD
+    onOpenRoleSwitcher: () -> Unit,
+    onShareProfile: () -> Unit,
+    onSignOut: () -> Unit,
+=======
+    onShareProfile: () -> Unit,
+    onSignOut: () -> Unit,
+    onOpenEditProfile: () -> Unit = {},
+    onOpenIdCard: () -> Unit = {},
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     modifier: Modifier = Modifier
 ) {
     var certSearchQuery by remember { mutableStateOf("") }
@@ -149,6 +162,37 @@ fun ProfileScreen(
                             Text("${user.coCurricularCredits} Verified Credits", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.bodySmall)
                         }
                     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        OutlinedButton(
+                            onClick = onOpenEditProfile,
+                            modifier = Modifier.weight(1f).testTag("open_edit_profile_button")
+                        ) {
+                            Icon(Icons.Filled.Edit, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Edit Bio", fontSize = 12.sp)
+                        }
+
+                        Button(
+                            onClick = onOpenIdCard,
+                            modifier = Modifier.weight(1f).testTag("open_id_card_button")
+                        ) {
+                            Icon(Icons.Filled.Badge, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Campus ID Pass", fontSize = 12.sp)
+                        }
+                    }
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
                 }
             }
         }
@@ -387,6 +431,10 @@ fun ProfileScreen(
                     Divider()
                     Spacer(modifier = Modifier.height(14.dp))
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c0aa687 (final project)
                     // Persona Switcher
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -399,6 +447,41 @@ fun ProfileScreen(
                         }
                         OutlinedButton(onClick = onOpenRoleSwitcher) {
                             Text("Switch")
+<<<<<<< HEAD
+=======
+=======
+                    // Immutable Role Credential Status (Switching locked)
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        modifier = Modifier.fillMaxWidth().testTag("immutable_role_card")
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Lock,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    text = "Institutional Role: ${role.label}",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 13.sp
+                                )
+                                Text(
+                                    text = "Permanently locked to account for transcript authenticity. To access another role, sign out and sign in with authorized credentials.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontSize = 11.sp
+                                )
+                            }
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
                         }
                     }
 

@@ -1,13 +1,37 @@
 package com.example.data
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+import android.content.Context
+import android.content.SharedPreferences
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 import com.example.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+import org.json.JSONArray
+import org.json.JSONObject
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 import java.util.UUID
 
 class ClubSphereRepository {
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    private var prefs: SharedPreferences? = null
+
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     private val _currentCampus = MutableStateFlow(Campus.HI_TECH)
     val currentCampus: StateFlow<Campus> = _currentCampus.asStateFlow()
 
@@ -23,12 +47,68 @@ class ClubSphereRepository {
     private val _memberships = MutableStateFlow(
         listOf(
             Membership("mem_01", SampleData.defaultUser.id, "kaizen_tech", MembershipStatus.APPROVED, "Member", "Sept 01, 2026"),
+<<<<<<< HEAD
             Membership("mem_02", SampleData.defaultUser.id, "nexcell", MembershipStatus.APPROVED, "Founding Fellow", "Sept 05, 2026")
+=======
+<<<<<<< HEAD
+            Membership("mem_02", SampleData.defaultUser.id, "nexcell", MembershipStatus.APPROVED, "Founding Fellow", "Sept 05, 2026")
+=======
+            Membership("mem_02", SampleData.defaultUser.id, "nexcell", MembershipStatus.APPROVED, "Founding Fellow", "Sept 05, 2026"),
+            Membership("mem_03", "peer_vikram", "kaizen_tech", MembershipStatus.PENDING, "Applicant", "Yesterday"),
+            Membership("mem_04", "peer_neha", "kaizen_tech", MembershipStatus.PENDING, "Applicant", "2 days ago"),
+            Membership("mem_05", "std_2024_015", "malhar", MembershipStatus.PENDING, "Applicant", "Today"),
+            Membership("mem_06", "std_2024_099", "khel_society", MembershipStatus.PENDING, "Applicant", "Yesterday"),
+            Membership("mem_07", "std_2024_077", "nexcell", MembershipStatus.PENDING, "Applicant", "Today")
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
         )
     )
     val memberships: StateFlow<List<Membership>> = _memberships.asStateFlow()
 
+<<<<<<< HEAD
     private val _activities = MutableStateFlow(SampleData.activities)
+=======
+<<<<<<< HEAD
+    private val _activities = MutableStateFlow(SampleData.activities)
+=======
+    private val _activities = MutableStateFlow(
+        listOf(
+            ActivityPlan(
+                id = "act_plan_pending_01",
+                clubId = "kaizen_tech",
+                clubName = "Kaizen Tech",
+                campus = Campus.HI_TECH,
+                title = "Club Day: Quantum Computing & Qiskit Algorithms",
+                date = "Saturday, Oct 25, 2026",
+                timeSlot = "10:00 AM - 1:00 PM",
+                venue = "Turing Quantum Lab 2",
+                topic = "Simulating Shor's & Grover's Algorithms on IBM Q Hardware",
+                deliverableType = "Jupyter Notebook & Circuit Analysis",
+                deadline = "Monday, Oct 27, 11:59 PM",
+                status = ActivityStatus.PLANNED,
+                advisorApproved = false,
+                checkInCode = "491823"
+            ),
+            ActivityPlan(
+                id = "act_plan_pending_02",
+                clubId = "malhar",
+                clubName = "Malhar",
+                campus = Campus.HI_TECH,
+                title = "Club Day: Acoustic Lighting & Script Reading",
+                date = "Saturday, Oct 25, 2026",
+                timeSlot = "2:00 PM - 5:00 PM",
+                venue = "Amphitheater Studio",
+                topic = "Stage direction, vocal projection and sound mixing",
+                deliverableType = "Lighting Cue Sheet & Script",
+                deadline = "Monday, Oct 27, 6:00 PM",
+                status = ActivityStatus.PLANNED,
+                advisorApproved = false,
+                checkInCode = "739102"
+            )
+        ) + SampleData.activities
+    )
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     val activities: StateFlow<List<ActivityPlan>> = _activities.asStateFlow()
 
     private val _attendanceRecords = MutableStateFlow(SampleData.attendanceRecords)
@@ -70,6 +150,184 @@ class ClubSphereRepository {
     private val _language = MutableStateFlow("English")
     val language: StateFlow<String> = _language.asStateFlow()
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    fun init(context: Context) {
+        if (prefs != null) return
+        prefs = context.getSharedPreferences("campuscred_storage", Context.MODE_PRIVATE)
+        loadState()
+    }
+
+    private fun loadState() {
+        val p = prefs ?: return
+        try {
+            // 1. Load Custom Users
+            val usersJson = p.getString("saved_users", null)
+            if (!usersJson.isNullOrBlank()) {
+                val array = JSONArray(usersJson)
+                val loadedUsers = mutableListOf<UserProfile>()
+                for (i in 0 until array.length()) {
+                    val obj = array.getJSONObject(i)
+                    loadedUsers.add(
+                        UserProfile(
+                            id = obj.getString("id"),
+                            name = obj.getString("name"),
+                            email = obj.getString("email"),
+                            rollNo = obj.getString("rollNo"),
+                            campus = Campus.valueOf(obj.optString("campus", "HI_TECH")),
+                            department = obj.optString("department", "Computer Science & Engineering"),
+                            academicYear = obj.optString("academicYear", "1st Year (Semester 1)"),
+                            bio = obj.optString("bio", ""),
+                            avatarColorHex = obj.optLong("avatarColorHex", 0xFF4338CA),
+                            coCurricularCredits = obj.optInt("coCurricularCredits", 18),
+                            rankTitle = obj.optString("rankTitle", "Campus Member"),
+                            role = UserRole.valueOf(obj.optString("role", "STUDENT")),
+                            password = obj.optString("password", "password123")
+                        )
+                    )
+                }
+                if (loadedUsers.isNotEmpty()) {
+                    _users.value = loadedUsers
+                }
+            }
+
+            // 2. Load Session
+            val loggedInUserId = p.getString("current_user_id", null)
+            val isLogged = p.getBoolean("is_logged_in", true)
+            if (!loggedInUserId.isNullOrBlank()) {
+                val found = _users.value.firstOrNull { it.id == loggedInUserId }
+                if (found != null) {
+                    _currentUser.value = found
+                    _currentRole.value = found.role
+                    _currentCampus.value = found.campus
+                }
+            }
+            _isLoggedIn.value = isLogged
+            _isDarkMode.value = p.getBoolean("is_dark_mode", true)
+            _language.value = p.getString("language", "English") ?: "English"
+
+            // 3. Load Tickets
+            val ticketsJson = p.getString("saved_tickets", null)
+            if (!ticketsJson.isNullOrBlank()) {
+                val array = JSONArray(ticketsJson)
+                val loadedTickets = mutableListOf<Ticket>()
+                for (i in 0 until array.length()) {
+                    val obj = array.getJSONObject(i)
+                    loadedTickets.add(
+                        Ticket(
+                            id = obj.getString("id"),
+                            eventId = obj.getString("eventId"),
+                            eventTitle = obj.getString("eventTitle"),
+                            tierName = obj.getString("tierName"),
+                            amountPaid = obj.getDouble("amountPaid"),
+                            qrCodePayload = obj.getString("qrCodePayload"),
+                            attendeeName = obj.getString("attendeeName"),
+                            rollNo = obj.getString("rollNo"),
+                            campus = Campus.valueOf(obj.optString("campus", "HI_TECH")),
+                            purchaseDate = obj.getString("purchaseDate"),
+                            transactionId = obj.getString("transactionId"),
+                            status = obj.optString("status", "CONFIRMED")
+                        )
+                    )
+                }
+                if (loadedTickets.isNotEmpty()) {
+                    _tickets.value = loadedTickets
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun saveUsers() {
+        val p = prefs ?: return
+        try {
+            val array = JSONArray()
+            _users.value.forEach { u ->
+                val obj = JSONObject()
+                obj.put("id", u.id)
+                obj.put("name", u.name)
+                obj.put("email", u.email)
+                obj.put("rollNo", u.rollNo)
+                obj.put("campus", u.campus.name)
+                obj.put("department", u.department)
+                obj.put("academicYear", u.academicYear)
+                obj.put("bio", u.bio)
+                obj.put("avatarColorHex", u.avatarColorHex)
+                obj.put("coCurricularCredits", u.coCurricularCredits)
+                obj.put("rankTitle", u.rankTitle)
+                obj.put("role", u.role.name)
+                obj.put("password", u.password)
+                array.put(obj)
+            }
+            p.edit().putString("saved_users", array.toString()).apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun saveSession() {
+        val p = prefs ?: return
+        p.edit()
+            .putBoolean("is_logged_in", _isLoggedIn.value)
+            .putString("current_user_id", _currentUser.value.id)
+            .putString("current_campus", _currentCampus.value.name)
+            .putString("current_role", _currentRole.value.name)
+            .putBoolean("is_dark_mode", _isDarkMode.value)
+            .putString("language", _language.value)
+            .apply()
+    }
+
+    private fun saveTickets() {
+        val p = prefs ?: return
+        try {
+            val array = JSONArray()
+            _tickets.value.forEach { t ->
+                val obj = JSONObject()
+                obj.put("id", t.id)
+                obj.put("eventId", t.eventId)
+                obj.put("eventTitle", t.eventTitle)
+                obj.put("tierName", t.tierName)
+                obj.put("amountPaid", t.amountPaid)
+                obj.put("qrCodePayload", t.qrCodePayload)
+                obj.put("attendeeName", t.attendeeName)
+                obj.put("rollNo", t.rollNo)
+                obj.put("campus", t.campus.name)
+                obj.put("purchaseDate", t.purchaseDate)
+                obj.put("transactionId", t.transactionId)
+                obj.put("status", t.status)
+                array.put(obj)
+            }
+            p.edit().putString("saved_tickets", array.toString()).apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun updateProfile(name: String, bio: String, department: String, academicYear: String) {
+        val current = _currentUser.value
+        val updated = current.copy(
+            name = if (name.isNotBlank()) name.trim() else current.name,
+            bio = bio.trim(),
+            department = if (department.isNotBlank()) department.trim() else current.department,
+            academicYear = if (academicYear.isNotBlank()) academicYear.trim() else current.academicYear
+        )
+        _currentUser.value = updated
+        _users.value = _users.value.map { if (it.id == updated.id) updated else it }
+        saveUsers()
+        saveSession()
+
+        addNotification(
+            title = "Profile Updated",
+            message = "Your institutional bio, department, and academic details have been successfully updated.",
+            type = "APPROVAL"
+        )
+    }
+
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     // Authentication Actions
     fun signIn(emailOrRoll: String, pass: String): Boolean {
         val query = emailOrRoll.trim().lowercase()
@@ -84,6 +342,13 @@ class ClubSphereRepository {
                 _currentRole.value = match.role
                 _currentCampus.value = match.campus
                 _isLoggedIn.value = true
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+                saveSession()
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 
                 addNotification(
                     title = "Welcome back, ${match.name.split(" ").first()}!",
@@ -106,12 +371,60 @@ class ClubSphereRepository {
         academicYear: String,
         role: UserRole
     ): Boolean {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c0aa687 (final project)
         if (name.isBlank() || email.isBlank() || rollNo.isBlank()) return false
 
         val existing = _users.value.any {
             it.email.equals(email.trim(), ignoreCase = true) || it.rollNo.equals(rollNo.trim(), ignoreCase = true)
         }
         if (existing) return false
+<<<<<<< HEAD
+=======
+=======
+        if (name.isBlank() || email.isBlank()) return false
+
+        val actualRollNo = if (rollNo.isNotBlank()) {
+            rollNo.trim().uppercase()
+        } else {
+            "MR-2026-" + UUID.randomUUID().toString().take(4).uppercase()
+        }
+
+        val existingIndex = _users.value.indexOfFirst {
+            it.email.equals(email.trim(), ignoreCase = true)
+        }
+        if (existingIndex != -1) {
+            val existing = _users.value[existingIndex]
+            val updated = existing.copy(
+                name = name.trim().ifBlank { existing.name },
+                rollNo = if (rollNo.isNotBlank()) rollNo.trim().uppercase() else existing.rollNo,
+                campus = campus,
+                department = department.ifBlank { existing.department },
+                academicYear = academicYear.ifBlank { existing.academicYear },
+                password = if (pass.isNotBlank()) pass else existing.password,
+                role = role
+            )
+            val list = _users.value.toMutableList()
+            list[existingIndex] = updated
+            _users.value = list
+            _currentUser.value = updated
+            _currentRole.value = role
+            _currentCampus.value = campus
+            _isLoggedIn.value = true
+            saveUsers()
+            saveSession()
+
+            addNotification(
+                title = "Welcome Back, ${updated.name}!",
+                message = "Your CampusCred profile has been verified and synchronized.",
+                type = "APPROVAL"
+            )
+            return true
+        }
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 
         val avatarColors = listOf(0xFF4338CA, 0xFF0284C7, 0xFF9333EA, 0xFF059669, 0xFFEA580C, 0xFF0D9488)
         val color = avatarColors.random()
@@ -120,7 +433,15 @@ class ClubSphereRepository {
             id = "user_" + UUID.randomUUID().toString().take(8),
             name = name.trim(),
             email = email.trim().lowercase(),
+<<<<<<< HEAD
             rollNo = rollNo.trim().uppercase(),
+=======
+<<<<<<< HEAD
+            rollNo = rollNo.trim().uppercase(),
+=======
+            rollNo = actualRollNo,
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
             campus = campus,
             department = department.ifBlank { "Computer Science & Engineering" },
             academicYear = academicYear.ifBlank { "1st Year (Semester 1)" },
@@ -142,6 +463,14 @@ class ClubSphereRepository {
         _currentRole.value = role
         _currentCampus.value = campus
         _isLoggedIn.value = true
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        saveUsers()
+        saveSession()
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 
         addNotification(
             title = "Account Created Successfully!",
@@ -153,6 +482,13 @@ class ClubSphereRepository {
 
     fun signOut() {
         _isLoggedIn.value = false
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        saveSession()
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     }
 
     fun switchUser(userId: String) {
@@ -184,7 +520,15 @@ class ClubSphereRepository {
     }
 
     fun requestMembership(clubId: String): Boolean {
+<<<<<<< HEAD
         val existing = _memberships.value.firstOrNull { it.clubId == clubId }
+=======
+<<<<<<< HEAD
+        val existing = _memberships.value.firstOrNull { it.clubId == clubId }
+=======
+        val existing = _memberships.value.firstOrNull { it.clubId == clubId && it.userId == _currentUser.value.id }
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
         if (existing != null) return false
 
         val newMembership = Membership(
@@ -212,12 +556,90 @@ class ClubSphereRepository {
     }
 
     fun leaveClub(clubId: String) {
+<<<<<<< HEAD
         _memberships.value = _memberships.value.filterNot { it.clubId == clubId }
+=======
+<<<<<<< HEAD
+        _memberships.value = _memberships.value.filterNot { it.clubId == clubId }
+=======
+        _memberships.value = _memberships.value.filterNot { it.clubId == clubId && it.userId == _currentUser.value.id }
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
         _clubs.value = _clubs.value.map {
             if (it.id == clubId && it.memberCount > 0) it.copy(memberCount = it.memberCount - 1) else it
         }
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    fun approveMembership(membershipId: String): Boolean {
+        var approvedClubName = ""
+        _memberships.value = _memberships.value.map { mem ->
+            if (mem.id == membershipId) {
+                approvedClubName = _clubs.value.firstOrNull { it.id == mem.clubId }?.name ?: "Club"
+                mem.copy(status = MembershipStatus.APPROVED, roleInClub = "Verified Member")
+            } else mem
+        }
+        addNotification(
+            title = "Membership Approved!",
+            message = "Student membership request for $approvedClubName has been approved by coordinator.",
+            type = "APPROVAL"
+        )
+        return true
+    }
+
+    fun rejectMembership(membershipId: String): Boolean {
+        _memberships.value = _memberships.value.filterNot { it.id == membershipId }
+        addNotification(
+            title = "Membership Request Updated",
+            message = "Student membership application was reviewed and archived.",
+            type = "INFO"
+        )
+        return true
+    }
+
+    fun issueCertificate(
+        studentName: String,
+        rollNo: String,
+        clubOrEventTitle: String,
+        category: String,
+        credits: Int
+    ): Certificate {
+        val newCert = Certificate(
+            id = "cert_" + UUID.randomUUID().toString().take(8),
+            certNumber = "MSOT-CERT-" + (1000..9999).random() + "-2026",
+            studentName = studentName,
+            rollNo = rollNo,
+            clubOrEventTitle = clubOrEventTitle,
+            category = category,
+            issueDate = "Today, Oct 14, 2026",
+            verificationHash = "SHA256:" + UUID.randomUUID().toString().replace("-", "").take(32),
+            signatoryName = _currentUser.value.name,
+            signatoryRole = "Faculty Advisor, MSOT"
+        )
+        _certificates.value = listOf(newCert) + _certificates.value
+
+        addNotification(
+            title = "Digital Certificate Issued!",
+            message = "Official credential issued to $studentName ($rollNo) for $clubOrEventTitle.",
+            type = "APPROVAL"
+        )
+        return newCert
+    }
+
+    fun broadcastPushNotification(title: String, message: String, targetCampus: Campus? = null) {
+        val campusLabel = targetCampus?.displayName ?: "All Campuses"
+        addNotification(
+            title = "[Broadcast: $campusLabel] $title",
+            message = message,
+            type = "ALERT"
+        )
+    }
+
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     fun checkInToActivity(activityId: String, inputCode: String, isLate: Boolean): Boolean {
         val activity = _activities.value.firstOrNull { it.id == activityId } ?: return false
         // Valid if matches the rotating PIN or QR code format
@@ -241,8 +663,26 @@ class ClubSphereRepository {
         )
         _attendanceRecords.value = listOf(record) + _attendanceRecords.value
 
+<<<<<<< HEAD
         addNotification(
             title = "Attendance Verified!",
+=======
+<<<<<<< HEAD
+        addNotification(
+            title = "Attendance Verified!",
+=======
+        // Real credit accumulation: Punctual +2 credits, Late +1 credit
+        val creditGain = if (isLate) 1 else 2
+        val updatedUser = _currentUser.value.copy(coCurricularCredits = _currentUser.value.coCurricularCredits + creditGain)
+        _currentUser.value = updatedUser
+        _users.value = _users.value.map { if (it.id == updatedUser.id) updatedUser else it }
+        saveUsers()
+        saveSession()
+
+        addNotification(
+            title = "Attendance Verified! (+$creditGain Credits)",
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
             message = "Check-in confirmed for ${activity.title} (${if (isLate) "Late Flagged" else "Punctual"}).",
             type = "EVENT"
         )
@@ -336,6 +776,13 @@ class ClubSphereRepository {
         _events.value = _events.value.map {
             if (it.id == eventId) it.copy(registeredCount = it.registeredCount + 1) else it
         }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        saveTickets()
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 
         addNotification(
             title = "Ticket Confirmed! ($tierName)",

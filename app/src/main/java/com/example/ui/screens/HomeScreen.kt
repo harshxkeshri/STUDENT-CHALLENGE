@@ -40,6 +40,13 @@ fun HomeScreen(
     onOpenCheckIn: (ActivityPlan) -> Unit,
     onOpenCoordinatorStation: (ActivityPlan) -> Unit,
     onOpenTranscript: () -> Unit,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    onOpenAiCopilot: () -> Unit = {},
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
     modifier: Modifier = Modifier
 ) {
     val activeActivity = activities.firstOrNull { it.status == ActivityStatus.CHECK_IN_OPEN } ?: activities.firstOrNull()
@@ -165,6 +172,82 @@ fun HomeScreen(
             }
         }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        // 1.5. Mirai AI Copilot Banner Card
+        item {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onOpenAiCopilot() }
+                    .testTag("home_ai_copilot_card"),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)),
+                border = androidx.compose.foundation.BorderStroke(1.dp, Brush.horizontalGradient(listOf(Color(0xFF38BDF8), Color(0xFF818CF8))))
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .clip(CircleShape)
+                            .background(Brush.linearGradient(listOf(Color(0xFF0284C7), Color(0xFF4338CA)))),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AutoAwesome,
+                            contentDescription = "Mirai AI Copilot",
+                            tint = Color.White,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "Mirai AI Copilot",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Surface(
+                                shape = RoundedCornerShape(4.dp),
+                                color = Color(0xFF2563EB).copy(alpha = 0.2f)
+                            ) {
+                                Text(
+                                    text = "Gemini",
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF2563EB),
+                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                        Text(
+                            text = "Instant club suggestions, event planning & resume impact bullets.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    Icon(
+                        imageVector = Icons.Filled.ChevronRight,
+                        contentDescription = "Open Copilot",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+        }
+
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
         // 2. Active Club Day Session Banner (Check-In Live)
         if (activeActivity != null) {
             item {

@@ -415,6 +415,10 @@ fun AuthScreen(
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Surface(
                                         shape = RoundedCornerShape(4.dp),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c0aa687 (final project)
                                         color = Color(0xFF6366F1).copy(alpha = 0.2f)
                                     ) {
                                         Text(
@@ -423,6 +427,29 @@ fun AuthScreen(
                                             fontWeight = FontWeight.Bold,
                                             color = Color(0xFFA5B4FC),
                                             modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+<<<<<<< HEAD
+=======
+=======
+                                        color = when (demoUser.role) {
+                                            UserRole.STUDENT -> Color(0xFF6366F1).copy(alpha = 0.2f)
+                                            UserRole.COORDINATOR -> Color(0xFF0284C7).copy(alpha = 0.2f)
+                                            UserRole.ADVISOR -> Color(0xFF9333EA).copy(alpha = 0.2f)
+                                            UserRole.CAMPUS_MANAGER -> Color(0xFF10B981).copy(alpha = 0.2f)
+                                        }
+                                    ) {
+                                        Text(
+                                            text = demoUser.role.label,
+                                            fontSize = 9.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = when (demoUser.role) {
+                                                UserRole.STUDENT -> Color(0xFFA5B4FC)
+                                                UserRole.COORDINATOR -> Color(0xFF7DD3FC)
+                                                UserRole.ADVISOR -> Color(0xFFD8B4FE)
+                                                UserRole.CAMPUS_MANAGER -> Color(0xFF6EE7B7)
+                                            },
+                                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
                                         )
                                     }
                                 }

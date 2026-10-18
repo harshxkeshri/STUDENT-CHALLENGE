@@ -18,6 +18,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+import androidx.compose.ui.graphics.Brush
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
@@ -1312,7 +1319,77 @@ fun TranscriptViewModal(
                     }
                 }
 
+<<<<<<< HEAD
                 Spacer(modifier = Modifier.height(20.dp))
+=======
+<<<<<<< HEAD
+                Spacer(modifier = Modifier.height(20.dp))
+=======
+                var isAiSummarizing by remember { mutableStateOf(false) }
+                var aiSummaryText by remember { mutableStateOf<String?>(null) }
+                val coroutineScope = rememberCoroutineScope()
+
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color(0xFF7C3AED).copy(alpha = 0.1f),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF7C3AED).copy(alpha = 0.3f)),
+                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = Color(0xFFA78BFA), modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Gemini Resume & Impact Bullets", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                            }
+                            FilledTonalButton(
+                                onClick = {
+                                    isAiSummarizing = true
+                                    coroutineScope.launch {
+                                        val summary = com.example.data.ai.GeminiAiService.instance.generateTranscriptSummary(
+                                            studentName = user.name,
+                                            rollNo = user.rollNo,
+                                            department = user.department,
+                                            credits = user.coCurricularCredits,
+                                            attendedCount = attendances.size,
+                                            submissionsCount = submissions.size,
+                                            certsCount = certificates.size
+                                        )
+                                        aiSummaryText = "${summary.executiveSummary}\n\n• " + summary.resumeBulletPoints.joinToString("\n• ")
+                                        isAiSummarizing = false
+                                    }
+                                },
+                                enabled = !isAiSummarizing,
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+                                modifier = Modifier.testTag("transcript_ai_generate_button")
+                            ) {
+                                if (isAiSummarizing) {
+                                    CircularProgressIndicator(modifier = Modifier.size(12.dp), strokeWidth = 1.5.dp)
+                                } else {
+                                    Text("Generate", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                }
+                            }
+                        }
+
+                        aiSummaryText?.let { summary ->
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = summary,
+                                fontSize = 11.sp,
+                                lineHeight = 16.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 
                 Button(
                     onClick = onDismiss,
@@ -1585,7 +1662,69 @@ fun CreateActivityPlanModal(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
+<<<<<<< HEAD
                 Spacer(modifier = Modifier.height(14.dp))
+=======
+<<<<<<< HEAD
+                Spacer(modifier = Modifier.height(14.dp))
+=======
+                var isAiGenerating by remember { mutableStateOf(false) }
+                val coroutineScope = rememberCoroutineScope()
+
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color(0xFF2563EB).copy(alpha = 0.1f),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF2563EB).copy(alpha = 0.3f)),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                            Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = Color(0xFF2563EB), modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "Auto-Draft with Gemini AI",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                        Button(
+                            onClick = {
+                                isAiGenerating = true
+                                coroutineScope.launch {
+                                    val suggestion = com.example.data.ai.GeminiAiService.instance.generateActivityPlan(
+                                        clubName = club.name,
+                                        category = club.category.label,
+                                        topicHint = topic,
+                                        campus = club.campus
+                                    )
+                                    title = suggestion.title
+                                    topic = suggestion.topic
+                                    venue = suggestion.venueSuggestion
+                                    timeSlot = suggestion.timeSlotSuggestion
+                                    deliverableType = suggestion.deliverableType
+                                    deadline = suggestion.suggestedDeadline
+                                    isAiGenerating = false
+                                }
+                            },
+                            enabled = !isAiGenerating,
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
+                            modifier = Modifier.testTag("modal_ai_autodraft_button")
+                        ) {
+                            if (isAiGenerating) {
+                                CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp)
+                            } else {
+                                Text("Spark", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                }
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)
 
                 OutlinedTextField(
                     value = title,
@@ -2115,3 +2254,450 @@ fun TeamFormationModal(
     }
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+// -------------------------------------------------------------
+// 14. EDIT PROFILE MODAL
+// -------------------------------------------------------------
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditProfileModal(
+    user: UserProfile,
+    onDismiss: () -> Unit,
+    onSave: (name: String, bio: String, department: String, academicYear: String) -> Unit
+) {
+    var name by remember { mutableStateOf(user.name) }
+    var bio by remember { mutableStateOf(user.bio) }
+    var department by remember { mutableStateOf(user.department) }
+    var academicYear by remember { mutableStateOf(user.academicYear) }
+
+    val departments = listOf(
+        "Computer Science & Engineering",
+        "Electronics & Communication",
+        "Information Technology",
+        "Mechanical Engineering",
+        "School of Management & Business",
+        "Design & Fine Arts",
+        "Academic Affairs & Administration"
+    )
+
+    val academicYears = listOf(
+        "1st Year (Semester 1)",
+        "2nd Year (Semester 3)",
+        "3rd Year (Semester 5)",
+        "4th Year (Semester 7)",
+        "Postgraduate / Research",
+        "Faculty Member",
+        "Campus Administration"
+    )
+
+    var deptExpanded by remember { mutableStateOf(false) }
+    var yearExpanded by remember { mutableStateOf(false) }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Edit Profile",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                IconButton(onClick = onDismiss) {
+                    Icon(Icons.Filled.Close, contentDescription = "Close")
+                }
+            }
+
+            Text(
+                text = "Update your verified personal bio, department, and academic details.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            // Full Name
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Full Name") },
+                leadingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                modifier = Modifier.fillMaxWidth().testTag("edit_name_input"),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Bio
+            OutlinedTextField(
+                value = bio,
+                onValueChange = { bio = it },
+                label = { Text("Personal & Academic Bio") },
+                placeholder = { Text("Share your interests, projects and club goals...") },
+                leadingIcon = { Icon(Icons.Filled.EditNote, contentDescription = null) },
+                modifier = Modifier.fillMaxWidth().height(100.dp).testTag("edit_bio_input"),
+                maxLines = 4
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Department
+            Text("Department", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
+            Spacer(modifier = Modifier.height(4.dp))
+            Box {
+                OutlinedTextField(
+                    value = department,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        IconButton(onClick = { deptExpanded = true }) {
+                            Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { deptExpanded = true }
+                        .testTag("edit_dept_input")
+                )
+                DropdownMenu(
+                    expanded = deptExpanded,
+                    onDismissRequest = { deptExpanded = false }
+                ) {
+                    departments.forEach { dept ->
+                        DropdownMenuItem(
+                            text = { Text(dept) },
+                            onClick = {
+                                department = dept
+                                deptExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Academic Year
+            Text("Academic Year / Designation", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
+            Spacer(modifier = Modifier.height(4.dp))
+            Box {
+                OutlinedTextField(
+                    value = academicYear,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        IconButton(onClick = { yearExpanded = true }) {
+                            Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { yearExpanded = true }
+                        .testTag("edit_year_input")
+                )
+                DropdownMenu(
+                    expanded = yearExpanded,
+                    onDismissRequest = { yearExpanded = false }
+                ) {
+                    academicYears.forEach { yr ->
+                        DropdownMenuItem(
+                            text = { Text(yr) },
+                            onClick = {
+                                academicYear = yr
+                                yearExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Cancel")
+                }
+
+                Button(
+                    onClick = {
+                        onSave(name, bio, department, academicYear)
+                        onDismiss()
+                    },
+                    modifier = Modifier.weight(1f).testTag("save_profile_button")
+                ) {
+                    Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Save Changes")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+// -------------------------------------------------------------
+// 15. DIGITAL CAMPUS ID CARD MODAL
+// -------------------------------------------------------------
+@Composable
+fun CampusIdCardModal(
+    user: UserProfile,
+    onDismiss: () -> Unit,
+    onShare: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = 8.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .testTag("campus_id_card_modal")
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                // Card Header (Institutional Header)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(Color(0xFF1E1B4B), Color(0xFF312E81), Color(0xFF4338CA))
+                            )
+                        )
+                        .padding(16.dp)
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                MiraiLogoBadge(sizeDp = 26.dp)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Column {
+                                    Text(
+                                        text = "MIRAI SCHOOL OF TECHNOLOGY",
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 11.sp,
+                                        color = Color.White,
+                                        letterSpacing = 1.sp
+                                    )
+                                    Text(
+                                        text = user.campus.displayName,
+                                        fontSize = 10.sp,
+                                        color = Color(0xFFA5B4FC)
+                                    )
+                                }
+                            }
+
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = Color.White.copy(alpha = 0.2f)
+                            ) {
+                                Text(
+                                    text = user.role.label.uppercase(),
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Card Body
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Profile Photo / Avatar with Ring
+                    Box(contentAlignment = Alignment.Center) {
+                        Surface(
+                            shape = CircleShape,
+                            color = Color(user.avatarColorHex),
+                            modifier = Modifier
+                                .size(76.dp)
+                                .border(3.dp, Color(0xFF6366F1), CircleShape)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(
+                                    text = user.name.split(" ").mapNotNull { it.firstOrNull() }.take(2).joinToString(""),
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        text = user.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
+                        Text(
+                            text = "ID: ${user.rollNo}",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Divider()
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Institutional Details Grid
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("DEPARTMENT", style = MaterialTheme.typography.labelSmall)
+                            Text(user.department, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodySmall)
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("ACADEMIC STATUS", style = MaterialTheme.typography.labelSmall)
+                            Text(user.academicYear, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("VERIFIED CREDITS", style = MaterialTheme.typography.labelSmall)
+                            Text("${user.coCurricularCredits} Points", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.bodySmall)
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("CREDENTIAL STATUS", style = MaterialTheme.typography.labelSmall)
+                            Text("Active • Verified", fontWeight = FontWeight.Bold, color = Color(0xFF10B981), style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // QR Code verification for gate/security scanners
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color.White,
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(12.dp))
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(12.dp)
+                        ) {
+                            QrCodeView(
+                                payload = "MSOT-SECURE-ID:${user.rollNo}:${user.campus.name}:${user.role.name}",
+                                size = 110.dp
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = "SECURITY SCAN CODE",
+                                fontSize = 9.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF475569)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Barcode representation
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(28.dp)
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        repeat(28) { i ->
+                            Box(
+                                modifier = Modifier
+                                    .width(if (i % 3 == 0) 3.dp else if (i % 2 == 0) 2.dp else 1.dp)
+                                    .fillMaxHeight()
+                                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = "* ${user.rollNo} *",
+                        fontSize = 10.sp,
+                        fontFamily = FontFamily.Monospace,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Action Buttons
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        OutlinedButton(
+                            onClick = onShare,
+                            modifier = Modifier.weight(1f).testTag("share_id_button")
+                        ) {
+                            Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Share Pass", fontSize = 12.sp)
+                        }
+
+                        Button(
+                            onClick = onDismiss,
+                            modifier = Modifier.weight(1f).testTag("close_id_button")
+                        ) {
+                            Text("Close", fontSize = 12.sp)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+>>>>>>> a05b565 (final project)
+>>>>>>> c0aa687 (final project)

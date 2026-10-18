@@ -1,0 +1,297 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account profile with role and academic details",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID matching document ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the user"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address"
+        },
+        "rollNo": {
+          "type": "string",
+          "description": "Roll or faculty ID number"
+        },
+        "campus": {
+          "type": "string",
+          "description": "Campus location enum key"
+        },
+        "department": {
+          "type": "string",
+          "description": "Academic department"
+        },
+        "academicYear": {
+          "type": "string",
+          "description": "Academic year or designation"
+        },
+        "bio": {
+          "type": "string",
+          "description": "User biography"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["STUDENT", "COORDINATOR", "ADVISOR", "CAMPUS_MANAGER"],
+          "description": "Assigned immutable role"
+        },
+        "coCurricularCredits": {
+          "type": "integer",
+          "description": "Earned co-curricular credits"
+        },
+        "rankTitle": {
+          "type": "string",
+          "description": "Honorary rank title"
+        },
+        "avatarColorHex": {
+          "type": "integer",
+          "description": "Color avatar code"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of profile creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update"
+        }
+      },
+      "required": ["userId", "name", "email", "role", "campus", "department", "createdAt"]
+    },
+    "Club": {
+      "title": "Club",
+      "description": "Campus club or student organization",
+      "type": "object",
+      "properties": {
+        "clubId": {
+          "type": "string",
+          "description": "Unique club identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Club name"
+        },
+        "shortCode": {
+          "type": "string",
+          "description": "Club short code"
+        },
+        "category": {
+          "type": "string",
+          "description": "Club category"
+        },
+        "tagLine": {
+          "type": "string",
+          "description": "One-line tagline"
+        },
+        "description": {
+          "type": "string",
+          "description": "Full club overview"
+        },
+        "facultyAdvisor": {
+          "type": "string",
+          "description": "Faculty advisor name"
+        },
+        "facultyAdvisorId": {
+          "type": "string",
+          "description": "Faculty advisor UID"
+        },
+        "leadCoordinator": {
+          "type": "string",
+          "description": "Lead student coordinator name"
+        },
+        "leadCoordinatorId": {
+          "type": "string",
+          "description": "Lead student coordinator UID"
+        },
+        "memberCount": {
+          "type": "integer",
+          "description": "Active member count"
+        },
+        "capacity": {
+          "type": "integer",
+          "description": "Maximum club capacity"
+        },
+        "campus": {
+          "type": "string",
+          "description": "Campus location"
+        },
+        "meetingSchedule": {
+          "type": "string",
+          "description": "Meeting day and time slot"
+        },
+        "primaryColorHex": {
+          "type": "integer",
+          "description": "Theme color"
+        },
+        "accentColorHex": {
+          "type": "integer",
+          "description": "Secondary accent color"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp"
+        }
+      },
+      "required": ["clubId", "name", "category", "campus", "leadCoordinator", "facultyAdvisor", "createdAt"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "Campus event, workshop, or competition",
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "description": "Unique event identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Event title"
+        },
+        "clubId": {
+          "type": "string",
+          "description": "Hosting club ID"
+        },
+        "clubName": {
+          "type": "string",
+          "description": "Hosting club name"
+        },
+        "campus": {
+          "type": "string",
+          "description": "Campus location"
+        },
+        "isInterCampus": {
+          "type": "boolean",
+          "description": "Available across all campuses"
+        },
+        "description": {
+          "type": "string",
+          "description": "Event details"
+        },
+        "date": {
+          "type": "string",
+          "description": "Event date"
+        },
+        "time": {
+          "type": "string",
+          "description": "Event timing"
+        },
+        "venue": {
+          "type": "string",
+          "description": "Campus hall or lab"
+        },
+        "registeredCount": {
+          "type": "integer",
+          "description": "Number of registered attendees"
+        },
+        "capacity": {
+          "type": "integer",
+          "description": "Maximum seating capacity"
+        },
+        "organizerId": {
+          "type": "string",
+          "description": "UID of the event organizer"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["UPCOMING", "ONGOING", "COMPLETED", "PENDING_APPROVAL", "REJECTED"],
+          "description": "Approval and timeline status"
+        },
+        "isDutyLeaveEligible": {
+          "type": "boolean",
+          "description": "Whether attendance grants duty leave"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp"
+        }
+      },
+      "required": ["eventId", "title", "clubId", "clubName", "campus", "date", "venue", "createdAt"]
+    },
+    "Registration": {
+      "title": "Registration",
+      "description": "Event registration tracking user attendance status",
+      "type": "object",
+      "properties": {
+        "registrationId": {
+          "type": "string",
+          "description": "Unique registration ID (matches userId)"
+        },
+        "eventId": {
+          "type": "string",
+          "description": "Associated event ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Registrant user UID"
+        },
+        "userName": {
+          "type": "string",
+          "description": "Registrant display name"
+        },
+        "attendanceStatus": {
+          "type": "string",
+          "enum": ["REGISTERED", "ATTENDED", "CANCELLED", "CONFIRMED"],
+          "description": "Attendance status in event"
+        },
+        "registeredAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of registration"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update"
+        }
+      },
+      "required": ["registrationId", "eventId", "userId", "attendanceStatus"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of user profiles enforcing role-based immutability"
+    },
+    "/clubs/{clubId}": {
+      "schema": "Club",
+      "description": "Collection of campus clubs"
+    },
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "Collection of campus events"
+    },
+    "/events/{eventId}/registrations/{registrationId}": {
+      "schema": "Registration",
+      "description": "Sub-collection of event registrations and attendance status"
+    },
+    "/memberships/{membershipId}": {
+      "schema": "Membership",
+      "description": "Global collection associating users with their club memberships"
+    },
+    "/users/{userId}/memberships/{membershipId}": {
+      "schema": "Membership",
+      "description": "User sub-collection of joined club memberships"
+    }
+  }
+}

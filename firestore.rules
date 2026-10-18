@@ -1,0 +1,180 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function getUserData(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data;
+    }
+
+    // ----------------------------------------------------
+    // User Profile Validation & RBAC
+    // ----------------------------------------------------
+    function isValidUserProfile(data) {
+      return data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() >= 3 && data.email.size() <= 150 &&
+             data.role in ['STUDENT', 'COORDINATOR', 'ADVISOR', 'CAMPUS_MANAGER'] &&
+             data.campus is string && data.campus.size() <= 50 &&
+             data.department is string && data.department.size() <= 100 &&
+             (!('rollNo' in data) || (data.rollNo is string && data.rollNo.size() <= 50)) &&
+             (!('academicYear' in data) || (data.academicYear is string && data.academicYear.size() <= 50)) &&
+             (!('bio' in data) || (data.bio is string && data.bio.size() <= 500)) &&
+             (!('rankTitle' in data) || (data.rankTitle is string && data.rankTitle.size() <= 100)) &&
+             (!('avatarColorHex' in data) || data.avatarColorHex is int) &&
+             (!('coCurricularCredits' in data) || data.coCurricularCredits is int) &&
+             (!('dutyLeaveHours' in data) || data.dutyLeaveHours is int) &&
+             (!('attendanceRate' in data) || data.attendanceRate is int) &&
+             (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time));
+    }
+
+    match /users/{userId} {
+      allow get, list: if true;
+      allow create, update: if true;
+      allow delete: if isSignedIn() && isOwner(userId);
+
+      match /memberships/{membershipId} {
+        allow get, list: if true;
+        allow create, update, delete: if true;
+      }
+    }
+
+    // Root memberships collection
+    match /memberships/{membershipId} {
+      allow get, list: if true;
+      allow create, update, delete: if true;
+    }
+
+    // ----------------------------------------------------
+    // Club Validation & Permissions
+    // ----------------------------------------------------
+    function isValidClub(data) {
+      return data.clubId is string && data.clubId.size() >= 1 && data.clubId.size() <= 128 &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             data.category is string && data.category.size() <= 50 &&
+             data.campus is string && data.campus.size() <= 50 &&
+             data.leadCoordinator is string && data.leadCoordinator.size() <= 100 &&
+             data.facultyAdvisor is string && data.facultyAdvisor.size() <= 100 &&
+             (!('shortCode' in data) || (data.shortCode is string && data.shortCode.size() <= 20)) &&
+             (!('tagLine' in data) || (data.tagLine is string && data.tagLine.size() <= 200)) &&
+             (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+             (!('leadCoordinatorId' in data) || (data.leadCoordinatorId is string && data.leadCoordinatorId.size() <= 128)) &&
+             (!('facultyAdvisorId' in data) || (data.facultyAdvisorId is string && data.facultyAdvisorId.size() <= 128)) &&
+             (!('memberCount' in data) || data.memberCount is int) &&
+             (!('capacity' in data) || data.capacity is int) &&
+             (!('meetingSchedule' in data) || (data.meetingSchedule is string && data.meetingSchedule.size() <= 100)) &&
+             (!('primaryColorHex' in data) || data.primaryColorHex is int) &&
+             (!('accentColorHex' in data) || data.accentColorHex is int) &&
+             (!('status' in data) || data.status in ['ACTIVE', 'PROBATION', 'PENDING_APPROVAL']) &&
+             (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time));
+    }
+
+    match /clubs/{clubId} {
+      allow get, list: if true;
+
+      allow create: if (isSignedIn() || request.auth == null) &&
+                       isValidId(clubId) &&
+                       incoming().clubId == clubId &&
+                       incoming().keys().hasAll(['clubId', 'name', 'category', 'campus', 'leadCoordinator', 'facultyAdvisor', 'createdAt']) &&
+                       incoming().createdAt is timestamp &&
+                       incoming().createdAt <= request.time &&
+                       isValidClub(incoming());
+
+      allow update: if (isSignedIn() || request.auth == null) &&
+                       isValidId(clubId) &&
+                       incoming().clubId == existing().clubId &&
+                       incoming().createdAt == existing().createdAt &&
+                       isValidClub(incoming()) &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'name', 'shortCode', 'category', 'tagLine', 'description',
+                         'facultyAdvisor', 'facultyAdvisorId', 'leadCoordinator',
+                         'leadCoordinatorId', 'memberCount', 'capacity', 'campus',
+                         'meetingSchedule', 'primaryColorHex', 'accentColorHex',
+                         'status', 'updatedAt'
+                       ]);
+
+      allow delete: if isSignedIn() &&
+                       isValidId(clubId) &&
+                       exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+                       getUserData(request.auth.uid).role == 'CAMPUS_MANAGER';
+    }
+
+    // ----------------------------------------------------
+    // Event Validation & Permissions
+    // ----------------------------------------------------
+    function isValidEvent(data) {
+      return data.eventId is string && data.eventId.size() >= 1 && data.eventId.size() <= 128 &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 150 &&
+             data.clubId is string && data.clubId.size() <= 128 &&
+             data.clubName is string && data.clubName.size() <= 100 &&
+             data.campus is string && data.campus.size() <= 50 &&
+             data.date is string && data.date.size() <= 50 &&
+             data.venue is string && data.venue.size() <= 100 &&
+             (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+             (!('time' in data) || (data.time is string && data.time.size() <= 50)) &&
+             (!('registeredCount' in data) || data.registeredCount is int) &&
+             (!('capacity' in data) || data.capacity is int) &&
+             (!('organizerId' in data) || (data.organizerId is string && data.organizerId.size() <= 128)) &&
+             (!('status' in data) || data.status in ['UPCOMING', 'ONGOING', 'COMPLETED', 'PENDING_APPROVAL', 'REJECTED']) &&
+             (!('isInterCampus' in data) || data.isInterCampus is bool) &&
+             (!('isDutyLeaveEligible' in data) || data.isDutyLeaveEligible is bool) &&
+             (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time));
+    }
+
+    match /events/{eventId} {
+      allow get, list: if true;
+
+      allow create: if (isSignedIn() || request.auth == null) &&
+                       isValidId(eventId) &&
+                       incoming().eventId == eventId &&
+                       incoming().keys().hasAll(['eventId', 'title', 'clubId', 'clubName', 'campus', 'date', 'venue', 'createdAt']) &&
+                       incoming().createdAt is timestamp &&
+                       incoming().createdAt <= request.time &&
+                       isValidEvent(incoming());
+
+      allow update: if (isSignedIn() || request.auth == null) &&
+                       isValidId(eventId) &&
+                       incoming().eventId == existing().eventId &&
+                       incoming().createdAt == existing().createdAt &&
+                       isValidEvent(incoming()) &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'title', 'clubId', 'clubName', 'campus', 'isInterCampus',
+                         'description', 'date', 'time', 'venue', 'registeredCount',
+                         'capacity', 'organizerId', 'status', 'isDutyLeaveEligible',
+                         'updatedAt'
+                       ]);
+
+      allow delete: if isSignedIn() &&
+                       isValidId(eventId) &&
+                       (
+                         (existing().organizerId == request.auth.uid) ||
+                         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+                          getUserData(request.auth.uid).role in ['CAMPUS_MANAGER', 'ADVISOR'])
+                       );
+
+      match /registrations/{registrationId} {
+        allow get, list: if true;
+        allow create, update, delete: if true;
+      }
+    }
+  }
+}
